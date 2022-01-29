@@ -2,4 +2,5 @@ spring:
   h2:
     console:
       enabled: false
-food.prop: 'test_prod'
+food:
+  testProp: 'test_prod'

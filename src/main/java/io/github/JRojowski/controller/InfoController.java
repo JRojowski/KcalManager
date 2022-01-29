@@ -1,5 +1,6 @@
 package io.github.JRojowski.controller;
 
+import io.github.JRojowski.FoodConfigurationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -9,11 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class InfoController {
 
-    @Autowired
-    private DataSourceProperties dataSource;
+    private final DataSourceProperties dataSource;
+    private final FoodConfigurationProperties myProp;
 
-    @Value("${food.prop}")
-    private String myProp;
+    InfoController(final DataSourceProperties dataSource, final FoodConfigurationProperties myProp) {
+        this.dataSource = dataSource;
+        this.myProp = myProp;
+    }
 
     @GetMapping("/info/url")
     String url() {
@@ -22,6 +25,6 @@ class InfoController {
 
     @GetMapping("info/prop")
     String myProp() {
-        return myProp;
+        return myProp.getTestProp();
     }
 }

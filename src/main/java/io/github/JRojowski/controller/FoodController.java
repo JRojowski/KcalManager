@@ -27,7 +27,7 @@ class FoodController {
     @PostMapping(value = "/foods")
     ResponseEntity<Food> createFood(@RequestBody @Valid Food toCreate) {
         Food result = repository.save(toCreate);
-        return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
+        return ResponseEntity.created(URI.create("/" + result.getFoodId())).body(result);
     }
 
     @GetMapping(value = "/foods", params = {"!sort", "!page", "!size"})
@@ -54,8 +54,24 @@ class FoodController {
         if(!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        toUpdate.setId(id);
-        repository.save(toUpdate);
+        repository.findById(id)
+                .ifPresent(food -> {
+                    food.updateFrom(toUpdate);
+                    repository.save(food);
+                });
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/foods/{id}")
+    public ResponseEntity<?> reportFood(@PathVariable int id) {
+        if(!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        repository.findById(id)
+                .ifPresent(food -> {
+                    food.setReported(!food.isReported());
+                    repository.save(food);
+                });
         return ResponseEntity.noContent().build();
     }
 }

@@ -17,6 +17,8 @@ public interface FoodRepository {
 
     boolean existsById(Integer id);
 
+    boolean existsByReportedIsTrue();
+
     List<Food> findByProteinGreaterThanEqual(@Param("protein") Double protein);
 
     Food save(Food entity);
