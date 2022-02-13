@@ -1,13 +1,7 @@
 package io.github.JRojowski.logic;
 
-import io.github.JRojowski.model.Food;
-import io.github.JRojowski.model.Meal;
-import io.github.JRojowski.model.MealRepository;
-import io.github.JRojowski.model.Recipe;
-import io.github.JRojowski.model.projection.MealFoodWriteModel;
-import io.github.JRojowski.model.projection.MealReadModel;
-import io.github.JRojowski.model.projection.MealWriteModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.JRojowski.model.*;
+import io.github.JRojowski.model.projection.MealDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,26 +11,47 @@ import java.util.stream.Collectors;
 public class MealService {
 
     private MealRepository repository;
+    private FoodRepository foodRepository;
+    private RecipeRepository recipeRepository;
 
-    MealService(final MealRepository repository) {
+    MealService(final MealRepository repository, final FoodRepository foodRepository, final RecipeRepository recipeRepository) {
         this.repository = repository;
+        this.foodRepository = foodRepository;
+        this.recipeRepository = recipeRepository;
+    }
+//to do puscic z idikiem wyjebanym i stestowac bugiem
+    public Meal createMeal(MealDTO source) {
+        var newMeal = new Meal();
+        newMeal.setName(source.name);
+            newMeal.getRecipes().addAll(source.ingredients.stream()
+                    .map(recipe -> {
+                        Food food = foodRepository.findById(recipe.getFood().getFoodId()).orElse(null);
+                        Recipe newRecipe = new Recipe();
+                        newRecipe.setFood(food);
+                        newRecipe.setMeal(newMeal);
+                        newRecipe.setGrams(recipe.getGrams());
+                        return newRecipe;
+                    }).collect(Collectors.toSet())
+            );
+        return repository.save(newMeal);
     }
 
-    public MealReadModel createMeal(MealWriteModel source) {
-        var result = new Meal();
-        result.setName(source.getName());
-        result.setIngredients(source.getIngredients().stream()
-                                    .map(MealFoodWriteModel::toFood)
-                                    .collect(Collectors.toSet()));
-        repository.save(result);
-        return new MealReadModel(result);
+    public List<Meal> readAll() {
+        return repository.findAll();
     }
 
-    public List<MealReadModel> readAll() {
-        return repository.findAll().stream()
-                         .map(MealReadModel::new)
-                         .collect(Collectors.toList());
-    }
+    public void addIngredient(int mealId, int foodId, int grams) {
+        if(!recipeRepository.existsByFoodIdAndMealId(foodId, mealId)) {
+            Food food = foodRepository.findById(foodId).get();
+            Meal meal = repository.findById(mealId).get();
+            Recipe newRecipe = new Recipe();
+            newRecipe.setFood(food);
+            newRecipe.setMeal(meal);
+            newRecipe.setGrams(grams);
 
+            meal.getRecipes().add(newRecipe);
+            repository.save(meal);
+        }
+    }
 
 }

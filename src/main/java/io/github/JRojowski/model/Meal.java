@@ -1,5 +1,7 @@
 package io.github.JRojowski.model;
 
+import io.github.JRojowski.model.projection.MealDTO;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
@@ -17,16 +19,16 @@ public class Meal {
     @NotBlank(message = "Name must not be empty")
     private String name;
 
-    @OneToMany(mappedBy = "meal")
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private Set<Recipe> recipes = new HashSet<>();
-
-    @ManyToMany(mappedBy = "meals")
-    private Set<Food> ingredients = new HashSet<>();
 
 
     public Meal() {
     }
 
+    public Meal(final String name) {
+        this.name = name;
+    }
 
     public int getMealId() {
         return mealId;
@@ -52,12 +54,5 @@ public class Meal {
         this.recipes = recipes;
     }
 
-    public Set<Food> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(final Set<Food> ingredients) {
-        this.ingredients = ingredients;
-    }
 
 }

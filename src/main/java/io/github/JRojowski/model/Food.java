@@ -1,5 +1,7 @@
 package io.github.JRojowski.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
@@ -24,16 +26,8 @@ public class Food {
     private Double fat;
     private Double carbs;
 
-    @OneToMany(mappedBy = "food")
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private Set<Recipe> recipes = new HashSet<>();
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "Recipes",
-            joinColumns = {@JoinColumn(name = "food_id")},
-            inverseJoinColumns = {@JoinColumn(name = "meal_id")}
-    )
-    private Set<Meal> meals = new HashSet<>();
 
     @Embedded
     private Audit audit = new Audit();
@@ -120,14 +114,6 @@ public class Food {
         this.carbs = carbs;
     }
 
-    Set<Recipe> getRecipes() {
-        return recipes;
-    }
-
-    void setRecipes(final Set<Recipe> recipes) {
-        this.recipes = recipes;
-    }
-
     public boolean isReported() {
         return reported;
     }
@@ -136,12 +122,12 @@ public class Food {
         this.reported = reported;
     }
 
-    public Set<Meal> getMeals() {
-        return meals;
+    public Set<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setMeals(final Set<Meal> meals) {
-        this.meals = meals;
+    public void setRecipes(final Set<Recipe > meals) {
+        this.recipes = meals;
     }
 
     public void updateFrom(final Food source) {
@@ -153,7 +139,6 @@ public class Food {
         protein = source.protein;
         fat = source.fat;
         carbs = source.carbs;
-        recipes = source.recipes;
     }
 
 }

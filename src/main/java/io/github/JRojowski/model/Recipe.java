@@ -1,42 +1,39 @@
 package io.github.JRojowski.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "recipes")
 public class Recipe {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer recipeId;
-    private float grams;
+    @EmbeddedId
+    private RecipePK recipeId = new RecipePK();
 
     @ManyToOne
+    @MapsId("foodId")
     @JoinColumn(name = "food_id")
     private Food food;
 
     @ManyToOne
+    @MapsId("mealId")
     @JoinColumn(name = "meal_id")
+    @JsonIgnore
     private Meal meal;
+
+    private float grams;
 
 
     public Recipe() {
     }
 
 
-    public Integer getRecipeId() {
-        return recipeId;
-    }
-
-    void setRecipeId(final Integer recipeId) {
-        this.recipeId = recipeId;
-    }
-
     public Food getFood() {
         return food;
     }
 
-    void setFood(final Food food) {
+    public void setFood(final Food food) {
         this.food = food;
     }
 
@@ -44,7 +41,7 @@ public class Recipe {
         return meal;
     }
 
-    void setMeal(final Meal meal) {
+    public void setMeal(final Meal meal) {
         this.meal = meal;
     }
 
@@ -52,9 +49,8 @@ public class Recipe {
         return grams;
     }
 
-    void setGrams(final float grams) {
+    public void setGrams(final float grams) {
         this.grams = grams;
     }
-
 
 }

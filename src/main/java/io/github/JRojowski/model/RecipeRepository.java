@@ -9,4 +9,6 @@ public interface RecipeRepository {
     List<Recipe> findAll();
 
     Optional<Recipe> findById(Integer id);
+
+    boolean existsByFoodIdAndMealId(Integer foodId, Integer mealId);
 }

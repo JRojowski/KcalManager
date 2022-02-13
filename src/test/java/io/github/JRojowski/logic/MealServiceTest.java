@@ -1,11 +1,9 @@
 package io.github.JRojowski.logic;
 
-import io.github.JRojowski.model.Meal;
 import io.github.JRojowski.model.MealRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class MealServiceTest {
@@ -16,10 +14,11 @@ class MealServiceTest {
         // given
         var mockMealRepository = mock(MealRepository.class);
         // system under test
-        var toTest = new MealService(mockMealRepository);
+        var toTest = new MealService(mockMealRepository, null, null);
 
         // when
         //toTest.createMeal( )
         // then
     }
+
 }

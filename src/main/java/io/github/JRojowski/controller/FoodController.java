@@ -2,6 +2,7 @@ package io.github.JRojowski.controller;
 
 import io.github.JRojowski.model.Food;
 import io.github.JRojowski.model.FoodRepository;
+import io.github.JRojowski.model.Meal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -73,5 +74,10 @@ class FoodController {
                     repository.save(food);
                 });
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/ingredientsByMealId/{id}")
+    ResponseEntity<List<Meal>> readFoodsFromMeal(@PathVariable int id) {
+        return ResponseEntity.ok(repository.findFoodsAssociatedWithTheMealById(id));
     }
 }

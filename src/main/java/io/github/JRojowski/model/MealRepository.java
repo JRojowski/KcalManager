@@ -10,4 +10,8 @@ public interface MealRepository {
     Optional<Meal> findById(Integer id);
 
     Meal save (Meal entity);
+
+    List<Meal> findMealsAssociatedWithTheFoodById(Integer id);
+
+    boolean existsById(Integer id);
 }
