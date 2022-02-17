@@ -4,7 +4,7 @@ import io.github.JRojowski.model.*;
 import io.github.JRojowski.model.projection.MealDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,4 +54,41 @@ public class MealService {
         }
     }
 
+    private MealRepository inMemoryMealRepository() {
+        new MealRepository() {
+            private int index = 0;
+            private Map<Integer, Meal> map = new HashMap<>();
+
+            @Override
+            public List<Meal> findAll() {
+                return new ArrayList<>(map.values());
+            }
+
+            @Override
+            public Optional<Meal> findById(final Integer id) {
+                return Optional.ofNullable(map.get(id));
+            }
+
+            @Override
+            public Meal save(final Meal entity) {
+                if(entity.getMealId() != 0) {
+                    map.put(entity.getMealId(), entity);
+                } else {
+                    entity.
+                    map.put(++index, entity);
+                }
+                return entity;
+            }
+
+            @Override
+            public List<Meal> findMealsAssociatedWithTheFoodById(final Integer id) {
+                return null;
+            }
+
+            @Override
+            public boolean existsById(final Integer id) {
+                return false;
+            }
+        };
+    }
 }

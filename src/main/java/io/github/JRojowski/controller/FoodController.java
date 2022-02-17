@@ -77,7 +77,7 @@ class FoodController {
     }
 
     @GetMapping(value = "/ingredientsByMealId/{id}")
-    ResponseEntity<List<Meal>> readFoodsFromMeal(@PathVariable int id) {
+    ResponseEntity<List<Food>> readFoodsFromMeal(@PathVariable int id) {
         return ResponseEntity.ok(repository.findFoodsAssociatedWithTheMealById(id));
     }
 }

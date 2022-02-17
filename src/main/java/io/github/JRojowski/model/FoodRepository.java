@@ -23,5 +23,5 @@ public interface FoodRepository {
 
     Food save(Food entity);
 
-    List<Meal> findFoodsAssociatedWithTheMealById(Integer id);
+    List<Food> findFoodsAssociatedWithTheMealById(Integer id);
 }
