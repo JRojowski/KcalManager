@@ -50,6 +50,11 @@ class FoodController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping(value = "/ingredientsByMealId/{id}")
+    ResponseEntity<List<Food>> readFoodsFromMeal(@PathVariable int id) {
+        return ResponseEntity.ok(repository.findFoodsAssociatedWithTheMealById(id));
+    }
+
     @PutMapping("/foods/{id}")
     ResponseEntity<?> updateFood(@PathVariable int id, @RequestBody @Valid Food toUpdate) {
         if(!repository.existsById(id)) {
@@ -76,8 +81,5 @@ class FoodController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/ingredientsByMealId/{id}")
-    ResponseEntity<List<Food>> readFoodsFromMeal(@PathVariable int id) {
-        return ResponseEntity.ok(repository.findFoodsAssociatedWithTheMealById(id));
-    }
+
 }
