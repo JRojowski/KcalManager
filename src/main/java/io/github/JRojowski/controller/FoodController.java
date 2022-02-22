@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/foods")
 class FoodController {
 
     public static final Logger logger = LoggerFactory.getLogger(FoodController.class);
@@ -25,37 +26,42 @@ class FoodController {
     }
 
 
-    @PostMapping(value = "/foods")
+    @PostMapping
     ResponseEntity<Food> createFood(@RequestBody @Valid Food toCreate) {
         Food result = repository.save(toCreate);
         return ResponseEntity.created(URI.create("/" + result.getFoodId())).body(result);
     }
 
-    @GetMapping(value = "/foods", params = {"!sort", "!page", "!size"})
+    @GetMapping(params = {"!sort", "!page", "!size"})
     ResponseEntity<List<Food>> readAllFoods() {
         logger.warn("Exposing all the foods!");
         return ResponseEntity.ok(repository.findAll());
     }
 
-    @GetMapping(value = "/foods")
+    @GetMapping
     ResponseEntity<List<Food>> readAllFoods(Pageable page) {
         logger.info("Custom pageable");
         return ResponseEntity.ok(repository.findAll(page).getContent());
     }
 
-    @GetMapping(value = "/foods/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Food> readFoodById(@PathVariable int id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/ingredientsByMealId/{id}")
+    @GetMapping("/findFoodByMealId/{id}")
     ResponseEntity<List<Food>> readFoodsFromMeal(@PathVariable int id) {
         return ResponseEntity.ok(repository.findFoodsAssociatedWithTheMealById(id));
     }
 
-    @PutMapping("/foods/{id}")
+    @GetMapping("/search/reported")
+    ResponseEntity<List<Food>> readReportedFoods(@RequestParam(defaultValue = "true") boolean state) {
+        return ResponseEntity.ok(repository.findByReported(state));
+    }
+
+    @PutMapping("/{id}")
     ResponseEntity<?> updateFood(@PathVariable int id, @RequestBody @Valid Food toUpdate) {
         if(!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
@@ -68,7 +74,7 @@ class FoodController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/foods/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> reportFood(@PathVariable int id) {
         if(!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
@@ -80,6 +86,5 @@ class FoodController {
                 });
         return ResponseEntity.noContent().build();
     }
-
 
 }

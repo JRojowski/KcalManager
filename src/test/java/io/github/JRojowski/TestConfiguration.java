@@ -83,6 +83,11 @@ class TestConfiguration {
             public List<Food> findFoodsAssociatedWithTheMealById(final Integer id) {
                 return null;
             }
+
+            @Override
+            public List<Food> findByReported(final boolean state) {
+                return null;
+            }
         };
     }
 }

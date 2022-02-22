@@ -17,7 +17,6 @@ interface SqlFoodRepository extends FoodRepository, JpaRepository<Food, Integer>
     @Query(nativeQuery = true, value = "select count(*) > 0 from foods where food_id=:id")
     boolean existsById(@Param("id") Integer id);
 
-
     @Override
     @Query(value = "select distinct food from Food food join food.recipes recipes join recipes.meal meal where meal.mealId=:id")
     List<Food> findFoodsAssociatedWithTheMealById(@Param("id") Integer id);

@@ -24,4 +24,6 @@ public interface FoodRepository {
     Food save(Food entity);
 
     List<Food> findFoodsAssociatedWithTheMealById(Integer id);
+
+    List<Food> findByReported(boolean state);
 }
