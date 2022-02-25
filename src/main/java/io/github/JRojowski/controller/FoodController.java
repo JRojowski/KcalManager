@@ -1,8 +1,8 @@
 package io.github.JRojowski.controller;
 
+import io.github.JRojowski.logic.FoodService;
 import io.github.JRojowski.model.Food;
 import io.github.JRojowski.model.FoodRepository;
-import io.github.JRojowski.model.Meal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(value = "/foods")
@@ -19,12 +20,12 @@ class FoodController {
 
     public static final Logger logger = LoggerFactory.getLogger(FoodController.class);
     private final FoodRepository repository;
+    private final FoodService service;
 
-
-    FoodController(final FoodRepository repository) {
+    FoodController(final FoodRepository repository, final FoodService service) {
         this.repository = repository;
+        this.service = service;
     }
-
 
     @PostMapping
     ResponseEntity<Food> createFood(@RequestBody @Valid Food toCreate) {
@@ -33,9 +34,9 @@ class FoodController {
     }
 
     @GetMapping(params = {"!sort", "!page", "!size"})
-    ResponseEntity<List<Food>> readAllFoods() {
+    CompletableFuture<ResponseEntity<List<Food>>> readAllFoods() {
         logger.warn("Exposing all the foods!");
-        return ResponseEntity.ok(repository.findAll());
+        return service.findAllAsync().thenApply(ResponseEntity::ok);
     }
 
     @GetMapping
@@ -51,7 +52,7 @@ class FoodController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/findFoodByMealId/{id}")
+    @GetMapping("/findByMealId/{id}")
     ResponseEntity<List<Food>> readFoodsFromMeal(@PathVariable int id) {
         return ResponseEntity.ok(repository.findFoodsAssociatedWithTheMealById(id));
     }

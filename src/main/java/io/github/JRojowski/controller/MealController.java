@@ -51,7 +51,7 @@ class MealController {
     }
 
     @PutMapping(value = "/addIngredient")
-    ResponseEntity<?> addIngredient(@RequestParam int meal, @RequestParam int food, @RequestParam int grams) {
+    ResponseEntity<?> addIngredient(@RequestParam int meal, @RequestParam int food, @RequestParam(defaultValue = "0") int grams) {
         service.addIngredient(meal, food, grams);
         return ResponseEntity.noContent().build();
     }

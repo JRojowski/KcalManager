@@ -18,6 +18,10 @@ interface SqlFoodRepository extends FoodRepository, JpaRepository<Food, Integer>
     boolean existsById(@Param("id") Integer id);
 
     @Override
-    @Query(value = "select distinct food from Food food join food.recipes recipes join recipes.meal meal where meal.mealId=:id")
+    //@Query(value = "select distinct food from Food food join food.recipes recipes join recipes.meal meal where meal.mealId=:id")
+    @Query(nativeQuery = true, value = "select distinct * from FOODS" +
+            " join RECIPES R on FOODS.FOOD_ID = R.FOOD_ID" +
+            " join MEALS M2 on M2.MEAL_ID = R.MEAL_ID" +
+            " where M2.MEAL_ID=:id")
     List<Food> findFoodsAssociatedWithTheMealById(@Param("id") Integer id);
 }
