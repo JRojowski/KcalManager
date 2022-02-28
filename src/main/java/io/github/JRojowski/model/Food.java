@@ -46,7 +46,7 @@ public class Food {
         return foodId;
     }
 
-    void setFoodId(final int id) {
+    public void setFoodId(final int id) {
         this.foodId = id;
     }
 
@@ -122,7 +122,7 @@ public class Food {
         this.reported = reported;
     }
 
-    private Set<Recipe> getRecipes() {
+    public Set<Recipe> getRecipes() {
         return recipes;
     }
 

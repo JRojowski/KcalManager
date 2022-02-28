@@ -1,10 +1,9 @@
 package io.github.JRojowski.controller;
 
 import io.github.JRojowski.logic.MealService;
-import io.github.JRojowski.model.Food;
 import io.github.JRojowski.model.Meal;
 import io.github.JRojowski.model.MealRepository;
-import io.github.JRojowski.model.projection.MealDTO;
+import io.github.JRojowski.model.projection.MealWriteModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ class MealController {
     }
 
     @PostMapping(value = "/meals")
-    ResponseEntity<Meal> createMeal(@RequestBody @Valid MealDTO toCreate) {
+    ResponseEntity<Meal> createMeal(@RequestBody @Valid MealWriteModel toCreate) {
         Meal result = service.createMeal(toCreate);
         return ResponseEntity.created(URI.create("/" + result.getMealId())).body(result);
     }
@@ -35,7 +34,7 @@ class MealController {
     @GetMapping(value = "/meals", params = {"!sort", "!page", "!size"})
     ResponseEntity<List<Meal>> readAllMeals() {
         logger.warn("Exposing all the meals");
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.readAll());
     }
 
     @GetMapping(value = "/meals/{id}")
@@ -54,5 +53,10 @@ class MealController {
     ResponseEntity<?> addIngredient(@RequestParam int meal, @RequestParam int food, @RequestParam(defaultValue = "0") int grams) {
         service.addIngredient(meal, food, grams);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

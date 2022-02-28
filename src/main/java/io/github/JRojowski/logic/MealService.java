@@ -1,7 +1,7 @@
 package io.github.JRojowski.logic;
 
 import io.github.JRojowski.model.*;
-import io.github.JRojowski.model.projection.MealDTO;
+import io.github.JRojowski.model.projection.MealWriteModel;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,20 +19,20 @@ public class MealService {
         this.foodRepository = foodRepository;
         this.recipeRepository = recipeRepository;
     }
-//to do puscic z idikiem wyjebanym i stestowac bugiem
-    public Meal createMeal(MealDTO source) {
+
+    public Meal createMeal(MealWriteModel source) {
         var newMeal = new Meal();
-        newMeal.setName(source.name);
-            newMeal.getRecipes().addAll(source.ingredients.stream()
-                    .map(recipe -> {
-                        Food food = foodRepository.findById(recipe.getFood().getFoodId()).orElse(null);
-                        Recipe newRecipe = new Recipe();
-                        newRecipe.setFood(food);
-                        newRecipe.setMeal(newMeal);
-                        newRecipe.setGrams(recipe.getGrams());
-                        return newRecipe;
-                    }).collect(Collectors.toSet())
-            );
+        newMeal.setName(source.getName());
+        newMeal.getRecipes().addAll(source.getIngredients().stream()
+                .map(recipe -> {
+                    Food food = foodRepository.findById(recipe.getFood().getFoodId()).orElseThrow(() -> new IllegalArgumentException("Food with given ID not found"));
+                    Recipe newRecipe = new Recipe();
+                    newRecipe.setFood(food);
+                    newRecipe.setMeal(newMeal);
+                    newRecipe.setGrams(recipe.getGrams());
+                    return newRecipe;
+                }).collect(Collectors.toSet())
+        );
         return repository.save(newMeal);
     }
 
@@ -51,6 +51,8 @@ public class MealService {
 
             meal.getRecipes().add(newRecipe);
             repository.save(meal);
+        } else {
+            throw new IllegalArgumentException("Such recipe already exists!");
         }
     }
 

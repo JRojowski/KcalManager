@@ -1,12 +1,9 @@
 package io.github.JRojowski.model;
 
-import io.github.JRojowski.model.projection.MealDTO;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "meals")

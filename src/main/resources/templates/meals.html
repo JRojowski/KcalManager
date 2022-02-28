@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kcal App: meals</title>
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_black.min.css">
+    <style>
+        .Bd {
+            border: solid 1px whitesmoke;
+        }
+
+        .Bdc\(red\) {
+            border-color: red !important;
+        }
+
+        .C\(red\) {
+            color: red;
+        }
+
+        .P\(0\) {
+            padding: 0;
+        }
+
+        .P\(10px\) {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <h1 th:if="${message != null}" th:text="${message}"></h1>
+    <!--/*@thymesVar id="meals" type="java.util.List<io.github.JRojowski.model.Meal>"*/-->
+    <dl th:each="meal : ${meals}" class="Bd P(10px)">
+        <dt th:text="${meal.name}">...</dt>
+        <dd>
+            <ul class="P(0)">
+                <li th:each="ingredient : ${meal.recipes}" th:text="|${ingredient.food.name} (${ingredient.grams} g)|"></li>
+            </ul>
+        </dd>
+    </dl>
+    <fieldset>
+        <legend>Nowy posiłek</legend>
+        <!--/*@thymesVar id="meal" type="io.github.JRojowski.model.projection.MealWriteModel"*/-->
+        <form action="#" method="post" th:action="@{/mealsHTML}" th:object="${meal}">
+            <p class="C(red)" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></p>
+            <label>Nazwa
+                <input type="text" th:field="*{name}" th:errorclass="'Bdc(red)'"/>
+            </label>
+            <fieldset th:each="ingredient,ingredientStat : *{ingredients}">
+                <legend th:text="|Składnik ${ingredientStat.index + 1}|"></legend>
+                    <fieldset>
+                        <label>Food ID
+                            <input type="number" th:field="*{ingredients[__${ingredientStat.index}__].food.foodId}" th:errorclass="'Bdc(red)'">
+                        </label>
+                    </fieldset>
+                    <label>Ilość (g)
+                        <input type="number" th:field="*{ingredients[__${ingredientStat.index}__].grams}" th:errorclass="'Bdc(red)'"/>
+                    </label>
+            </fieldset>
+            <div>
+                <button type="submit" name="addIngredient">+</button>
+            </div>
+            <p>
+                <button type="submit">Dodaj</button>
+                <button type="reset">Wyczyść</button>
+            </p>
+        </form>
+    </fieldset>
+</main>
+</body>
+</html>
