@@ -42,6 +42,7 @@ class MealHTMLController {
         }
         service.createMeal(current);
         model.addAttribute("meal", new MealWriteModel());
+        model.addAttribute("meals", getMeals());
         model.addAttribute("message", "Dodano posiłek!");
         return "meals";
     }
