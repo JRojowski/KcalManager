@@ -50,11 +50,9 @@
             </label>
             <fieldset th:each="ingredient,ingredientStat : *{ingredients}">
                 <legend th:text="|Składnik ${ingredientStat.index + 1}|"></legend>
-                    <fieldset>
-                        <label>Food ID
-                            <input type="number" th:field="*{ingredients[__${ingredientStat.index}__].food.foodId}" th:errorclass="'Bdc(red)'">
-                        </label>
-                    </fieldset>
+                    <label>Jedzenie
+                        <input type="text" th:field="*{ingredients[__${ingredientStat.index}__].food.name}" th:errorclass="'Bdc(red)'">
+                    </label>
                     <label>Ilość (g)
                         <input type="number" th:field="*{ingredients[__${ingredientStat.index}__].grams}" th:errorclass="'Bdc(red)'"/>
                     </label>

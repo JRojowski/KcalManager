@@ -37,6 +37,10 @@ public class Food {
     public Food() {
     }
 
+    public Food(final String name) {
+        this.name = name;
+    }
+
     public Food(String name, Integer portion) {
        this.name = name;
        this.portion = portion;
@@ -54,7 +58,7 @@ public class Food {
         return name;
     }
 
-    private void setName(final String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

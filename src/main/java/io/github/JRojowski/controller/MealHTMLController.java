@@ -1,6 +1,8 @@
 package io.github.JRojowski.controller;
 
+import io.github.JRojowski.logic.FoodService;
 import io.github.JRojowski.logic.MealService;
+import io.github.JRojowski.model.Food;
 import io.github.JRojowski.model.Meal;
 import io.github.JRojowski.model.Recipe;
 import io.github.JRojowski.model.projection.MealWriteModel;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -57,4 +61,8 @@ class MealHTMLController {
     List<Meal> getMeals() {
         return service.readAll();
     }
+
+
+    //List<Food> foods =  foodService.readAllFood();
+    //model.addAttribute("operators", operators);
 }

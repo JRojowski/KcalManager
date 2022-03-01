@@ -15,6 +15,8 @@ public interface FoodRepository {
 
     Optional<Food> findById(Integer id);
 
+    Optional<Food> findByName(String id);
+
     boolean existsById(Integer id);
 
     boolean existsByReportedIsTrue();

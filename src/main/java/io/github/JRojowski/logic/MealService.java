@@ -25,7 +25,9 @@ public class MealService {
         newMeal.setName(source.getName());
         newMeal.getRecipes().addAll(source.getIngredients().stream()
                 .map(recipe -> {
-                    Food food = foodRepository.findById(recipe.getFood().getFoodId()).orElseThrow(() -> new IllegalArgumentException("Food with given ID not found"));
+                    Food food = foodRepository.findByName(recipe.getFood().getName()).orElseThrow(
+                            () -> new IllegalArgumentException("Food with given ID not found")
+                    );
                     Recipe newRecipe = new Recipe();
                     newRecipe.setFood(food);
                     newRecipe.setMeal(newMeal);

@@ -51,6 +51,11 @@ class TestConfiguration {
             }
 
             @Override
+            public Optional<Food> findByName(final String id) {
+                return Optional.empty();
+            }
+
+            @Override
             public boolean existsById(final Integer id) {
                 return foods.containsKey(id);
             }
