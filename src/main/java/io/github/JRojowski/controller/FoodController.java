@@ -34,9 +34,9 @@ class FoodController {
     }
 
     @GetMapping(params = {"!sort", "!page", "!size"})
-    CompletableFuture<ResponseEntity<List<Food>>> readAllFoods() {
+    ResponseEntity<List<Food>> readAllFoods() {
         logger.warn("Exposing all the foods!");
-        return service.findAllAsync().thenApply(ResponseEntity::ok);
+        return ResponseEntity.ok(service.readAllFood());
     }
 
     @GetMapping

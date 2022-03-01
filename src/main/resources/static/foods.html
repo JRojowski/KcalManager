@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kcal App: foods</title>
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_black.min.css">
+</head>
+<body>
+<main>
+    <fieldset>
+        <form>
+            <label>Nazwa
+                <input type="text" name="name" />
+            </label>
+            <label>Producent
+                <input type="text" name="producer" />
+            </label>
+            <label>Cena
+                <input type="number" name="price" />
+            </label>
+            <label>Porcja
+                <input type="number" name="portion" />
+            </label>
+            <label>Kcal
+                <input type="number" name="kcal" />
+            </label>
+            <label>Białko
+                <input type="number" name="protein" />
+            </label>
+            <label>Tłuszcze
+                <input type="number" name="fat" />
+            </label>
+            <label>Węgle
+                <input type="number" name="carbs" />
+            </label>
+            <button type="submit">Dodaj!</button>
+        </form>
+    </fieldset>
+</main>
+<script>
+    (async function() {
+        const main = document.querySelector('main');
+        const params = new URLSearchParams(location.search);
+        const response = await fetch('/foods');
+        if (response.ok) {
+            const foods = await response.json();
+            const list = document.createElement('ul');
+            foods.forEach(food => list.appendChild(createFood(food)));
+            main.prepend(list);
+        }
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const resp = await fetch('/foods', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: form.elements.name.value,
+                    producer: form.elements.producer.value,
+                    price: form.elements.price.value,
+                    portion: form.elements.portion.value,
+                    kcal: form.elements.kcal.value,
+                    protein: form.elements.protein.value,
+                    fat: form.elements.fat.value,
+                    carbs: form.elements.carbs.value
+                })
+            });
+            if (resp.ok) {
+                const foodFromServer = await resp.json();
+                document.querySelector('ul').appendChild(createFood(foodFromServer));
+                form.reset();
+            }
+        });
+
+        function createFood({ foodId, name, kcal, protein, fat, carbs, reported }) {
+            const result = document.createElement('li');
+            result.innerHTML = `
+                <label>
+                    <input type="checkbox" ${reported ? ' checked' : ''}/>
+                    ${name}
+                    <small>(${kcal} kcal, ${protein} b, ${fat} t, ${carbs} w)</small>
+                </label>
+            `;
+            result.querySelector('input').addEventListener('click', async (e) => {
+                const response = await fetch(`/foods/${foodId}`, { method: 'PATCH' });
+                    if (!response.ok) {
+                        e.target.checked = !e.target.checked;
+                    }
+            });
+            return result;
+        }
+    })();
+</script>
+</body>
+</html>

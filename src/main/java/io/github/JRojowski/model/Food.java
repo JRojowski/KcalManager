@@ -122,7 +122,7 @@ public class Food {
         this.reported = reported;
     }
 
-    public Set<Recipe> getRecipes() {
+    private Set<Recipe> getRecipes() {
         return recipes;
     }
 
