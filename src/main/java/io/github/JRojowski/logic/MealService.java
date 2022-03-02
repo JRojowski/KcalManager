@@ -23,12 +23,16 @@ public class MealService {
     public Meal createMeal(MealWriteModel source) {
         var newMeal = new Meal();
         newMeal.setName(source.getName());
+
         newMeal.getRecipes().addAll(source.getIngredients().stream()
                 .map(recipe -> {
-                    Food food = foodRepository.findByName(recipe.getFood().getName()).orElseThrow(
-                            () -> new IllegalArgumentException("Food with given ID not found")
-                    );
-                    Recipe newRecipe = new Recipe();
+                    Food food;
+                    if(foodRepository.existsByName(recipe.getFood().getName())) {
+                        food = foodRepository.findByName(recipe.getFood().getName()).get();
+                    } else {
+                        food = foodRepository.save(new Food(recipe.getFood().getName()));
+                    }
+                    var newRecipe = new Recipe();
                     newRecipe.setFood(food);
                     newRecipe.setMeal(newMeal);
                     newRecipe.setGrams(recipe.getGrams());

@@ -19,6 +19,8 @@ public interface FoodRepository {
 
     boolean existsById(Integer id);
 
+    boolean existsByName(String name);
+
     boolean existsByReportedIsTrue();
 
     List<Food> findByProteinGreaterThanEqual(@Param("protein") Double protein);

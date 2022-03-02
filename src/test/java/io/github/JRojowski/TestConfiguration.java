@@ -61,6 +61,11 @@ class TestConfiguration {
             }
 
             @Override
+            public boolean existsByName(final String name) {
+                return false;
+            }
+
+            @Override
             public boolean existsByReportedIsTrue() {
                 return false;
             }

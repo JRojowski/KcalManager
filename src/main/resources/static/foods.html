@@ -45,7 +45,7 @@
         const response = await fetch('/foods');
         if (response.ok) {
             const foods = await response.json();
-            const list = document.createElement('ul');
+            const list = document.createElement('dl');
             foods.forEach(food => list.appendChild(createFood(food)));
             main.prepend(list);
         }
@@ -71,26 +71,62 @@
             });
             if (resp.ok) {
                 const foodFromServer = await resp.json();
-                document.querySelector('ul').appendChild(createFood(foodFromServer));
+                document.querySelector('dl').appendChild(createFood(foodFromServer));
                 form.reset();
             }
         });
 
-        function createFood({ foodId, name, kcal, protein, fat, carbs, reported }) {
-            const result = document.createElement('li');
+        function createFood({ foodId, name, producer, price, portion, kcal, protein, fat, carbs, reported }) {
+            const result = document.createElement('dl');
             result.innerHTML = `
-                <label>
+               <style>
+                    .Bd {
+                        border: solid 1px whitesmoke;
+                    }
+
+                    .Bdc\\(red\\) {
+                        border-color: red !important;
+                    }
+
+                    .C\\(red\\) {
+                        color: red;
+                    }
+
+                    .P\\(0\\) {
+                        padding: 0;
+                        list-style-type: disc;
+                    }
+
+                    .P\\(10px\\) {
+                        padding: 10px;
+                    }
+
+               </style>
+               <dl class="Bd P(10px)">
+                    <dt>
                     <input type="checkbox" ${reported ? ' checked' : ''}/>
                     ${name}
-                    <small>(${kcal} kcal, ${protein} b, ${fat} t, ${carbs} w)</small>
-                </label>
+                    </dt>
+                    <dd>
+                        <ul class="P(0)">
+                            <li>${producer}</li>
+                            <li>${price} PLN</li>
+                            <li>${portion} g/szt</li>
+                            <li>${kcal} kcal</li>
+                            <li>${protein} B</li>
+                            <li>${fat} T</li>
+                            <li>${carbs} W</li>
+                        </ul>
+                    </dd>
+                </dl>
             `;
             result.querySelector('input').addEventListener('click', async (e) => {
                 const response = await fetch(`/foods/${foodId}`, { method: 'PATCH' });
-                    if (!response.ok) {
-                        e.target.checked = !e.target.checked;
-                    }
+                if (!response.ok) {
+                    e.target.checked = !e.target.checked;
+                }
             });
+
             return result;
         }
     })();
