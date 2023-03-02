@@ -43,7 +43,7 @@ class FoodServiceTest {
                 .when(mapper.foodFromDto(foodDto))
                 .thenReturn(food);
 
-        foodService.save(foodDto);
+        foodService.createNewFood(foodDto);
 
         verify(foodRepository, times(1)).save(food);
     }

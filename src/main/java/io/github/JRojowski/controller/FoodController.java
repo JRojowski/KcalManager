@@ -3,7 +3,6 @@ package io.github.JRojowski.controller;
 import io.github.JRojowski.entity.Food;
 import io.github.JRojowski.entity.dto.FoodCaloriesDto;
 import io.github.JRojowski.entity.dto.FoodDto;
-import io.github.JRojowski.repository.FoodRepository;
 import io.github.JRojowski.service.FoodService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,12 +21,11 @@ import java.util.List;
 class FoodController {
 
     public static final Logger logger = LoggerFactory.getLogger(FoodController.class);
-    private final FoodRepository foodRepository;
     private final FoodService foodService;
 
     @PostMapping
     ResponseEntity<Food> createFood(@Valid @RequestBody FoodDto foodDto) {
-        Food food = foodService.save(foodDto);
+        Food food = foodService.createNewFood(foodDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

@@ -1,7 +1,9 @@
 package io.github.JRojowski.util;
 
 import io.github.JRojowski.entity.Food;
+import io.github.JRojowski.entity.Meal;
 import io.github.JRojowski.entity.dto.FoodDto;
+import io.github.JRojowski.entity.dto.MealDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,6 +32,12 @@ public class Mapper {
                 .protein(food.getProtein())
                 .fat(food.getFat())
                 .carbs(food.getCarbs())
+                .build();
+    }
+
+    public Meal mealFromDto(MealDto mealDto) {
+        return Meal.builder()
+                .name(mealDto.getName())
                 .build();
     }
 }

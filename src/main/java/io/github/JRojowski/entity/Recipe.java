@@ -19,14 +19,14 @@ public class Recipe {
     @EmbeddedId
     private RecipePK recipeId = new RecipePK();
     @ManyToOne
-    @MapsId("foodId")
-    @JoinColumn(name = "food_id")
-    private Food food;
-    @ManyToOne
     @MapsId("mealId")
     @JoinColumn(name = "meal_id")
     @JsonIgnore
     private Meal meal;
+    @ManyToOne
+    @MapsId("foodId")
+    @JoinColumn(name = "food_id")
+    private Food food;
     private float grams;
 
 

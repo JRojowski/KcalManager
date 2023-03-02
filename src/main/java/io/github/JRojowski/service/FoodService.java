@@ -19,7 +19,7 @@ public class FoodService {
     public final FoodRepository foodRepository;
     public final Mapper mapper;
 
-    public Food save(FoodDto foodDto) {
+    public Food createNewFood(FoodDto foodDto) {
         return foodRepository.save(mapper.foodFromDto(foodDto));
     }
 
