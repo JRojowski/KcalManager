@@ -1,8 +1,8 @@
 package io.github.JRojowski.controller;
 
 import io.github.JRojowski.entity.Food;
-import io.github.JRojowski.entity.dto.FoodCaloriesDto;
 import io.github.JRojowski.entity.dto.FoodDto;
+import io.github.JRojowski.entity.dto.MealDto;
 import io.github.JRojowski.service.FoodService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -24,14 +24,14 @@ class FoodController {
     private final FoodService foodService;
 
     @PostMapping
-    ResponseEntity<Food> createFood(@Valid @RequestBody FoodDto foodDto) {
+    ResponseEntity<Integer> createFood(@Valid @RequestBody FoodDto foodDto) {
         Food food = foodService.createNewFood(foodDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(food.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(food);
+        return ResponseEntity.created(location).body(food.getId());
     }
 
     @GetMapping
@@ -49,10 +49,9 @@ class FoodController {
         return ResponseEntity.ok(foodService.reportFood(id));
     }
 
-    @GetMapping("/calories/{id}")
-    ResponseEntity<FoodCaloriesDto> countFoodCalories(@PathVariable int id) {
-        return ResponseEntity.ok(foodService.countFoodCalories(id));
+    @GetMapping("/{id}/meals")
+    ResponseEntity<List<MealDto>> getMealsfromFood(@PathVariable int id) {
+        return ResponseEntity.ok(foodService.getMealsFromFood(id));
     }
-
 
 }

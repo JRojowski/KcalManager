@@ -21,9 +21,8 @@ class LoggerFilter implements Filter {
                          final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
 
-        if (request instanceof HttpServletRequest) {
-            var httpRequest = (HttpServletRequest) request;
-            logger.info("[doFilter] " + httpRequest.getMethod() + " " + httpRequest.getRequestURI());
+        if (request instanceof HttpServletRequest httpRequest) {
+            logger.info(httpRequest.getMethod() + " " + httpRequest.getRequestURI());
         }
         chain.doFilter(request, response);
     }

@@ -40,4 +40,10 @@ public class Mapper {
                 .name(mealDto.getName())
                 .build();
     }
+
+    public MealDto dtoFromMeal(Meal meal) {
+        return MealDto.builder()
+                .name(meal.getName())
+                .build();
+    }
 }

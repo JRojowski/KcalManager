@@ -25,7 +25,7 @@ public class Food extends Audit {
     private Double protein;
     private Double fat;
     private Double carbs;
-    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
     private Boolean reported;
 }

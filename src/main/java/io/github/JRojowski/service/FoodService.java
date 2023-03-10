@@ -1,8 +1,9 @@
 package io.github.JRojowski.service;
 
 import io.github.JRojowski.entity.Food;
-import io.github.JRojowski.entity.dto.FoodCaloriesDto;
+import io.github.JRojowski.entity.Recipe;
 import io.github.JRojowski.entity.dto.FoodDto;
+import io.github.JRojowski.entity.dto.MealDto;
 import io.github.JRojowski.repository.FoodRepository;
 import io.github.JRojowski.util.Mapper;
 import lombok.AllArgsConstructor;
@@ -43,16 +44,12 @@ public class FoodService {
         return foodRepository.save(foodToUpdate);
     }
 
-    public FoodCaloriesDto countFoodCalories(int id) {
-        Food food = foodRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Food with id: " + id + " not found"));
-        return FoodCaloriesDto.builder()
-                .name(food.getName())
-                .portion(food.getPortion())
-                .kcal(food.getKcal() * food.getPortion() / 100)
-                .protein(food.getProtein() * food.getPortion() / 100)
-                .fat(food.getFat() * food.getPortion() / 100)
-                .carbs(food.getCarbs() * food.getPortion() / 100)
-                .build();
+    public List<MealDto> getMealsFromFood(int id) {
+        return foodRepository.findById(id)
+                    .orElseThrow()
+                    .getRecipes().stream()
+                    .map(Recipe::getMeal)
+                    .map(mapper::dtoFromMeal)
+                    .toList();
     }
 }

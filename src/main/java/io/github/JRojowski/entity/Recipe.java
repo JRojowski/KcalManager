@@ -1,5 +1,6 @@
 package io.github.JRojowski.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.JRojowski.util.RecipePK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class Recipe extends Audit {
     @ManyToOne
     @MapsId("mealId")
     @JoinColumn(name = "meal_id")
+    @JsonIgnore
     private Meal meal;
     @ManyToOne
     @MapsId("foodId")
