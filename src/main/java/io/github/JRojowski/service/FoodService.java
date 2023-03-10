@@ -39,7 +39,7 @@ public class FoodService {
     public Food reportFood(int id) {
         Food foodToUpdate = foodRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Food with id: " + id + " not found"));
-        foodToUpdate.setReported(!foodToUpdate.isReported());
+        foodToUpdate.setReported(!foodToUpdate.getReported());
         return foodRepository.save(foodToUpdate);
     }
 

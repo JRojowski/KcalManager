@@ -29,7 +29,7 @@ class MealController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(meal.getMealId())
+                .buildAndExpand(meal.getId())
                 .toUri();
 
         return ResponseEntity.created(location).body(meal);
