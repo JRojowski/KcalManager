@@ -45,8 +45,8 @@ class FoodController {
     }
 
     @PatchMapping("/report/{id}")
-    ResponseEntity<Food> reportFood(@PathVariable int id) {
-        return ResponseEntity.ok(foodService.reportFood(id));
+    ResponseEntity<Integer> reportFood(@PathVariable int id) {
+        return ResponseEntity.ok(foodService.reportFood(id).getId());
     }
 
     @GetMapping("/{id}/meals")

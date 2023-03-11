@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @Builder
 public class FoodDto {
+    private int id;
     @NotBlank(message = "Name must not be empty")
     private String name;
     private String producer;

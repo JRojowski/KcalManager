@@ -24,6 +24,7 @@ public class Mapper {
 
     public FoodDto dtoFromFood(Food food) {
         return FoodDto.builder()
+                .id(food.getId())
                 .name(food.getName())
                 .producer(food.getProducer())
                 .price(food.getPrice())

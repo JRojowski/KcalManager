@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class FoodService {
                .orElseThrow(() -> new NotFoundException("Food with id: " + id + " not found"));
     }
 
+    @Transactional
     public Food reportFood(int id) {
         Food foodToUpdate = foodRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Food with id: " + id + " not found"));
