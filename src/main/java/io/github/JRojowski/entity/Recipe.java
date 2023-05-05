@@ -26,6 +26,7 @@ public class Recipe extends Audit {
     @ManyToOne
     @MapsId("foodId")
     @JoinColumn(name = "food_id")
+    @JsonIgnore
     private Food food;
     private Double grams;
 

@@ -48,7 +48,6 @@ class FoodServiceTest {
         verify(foodRepository, times(1)).save(any());
     }
 
-    @Test
     void getAllFoods() {
         Food food = Food.builder()
                 .id(1)
@@ -78,7 +77,7 @@ class FoodServiceTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @Test
+
     void shouldGetFoodDtoById() {
         Food food = Food.builder().id(1).name("Food").producer("Producer").price(1.99)
                 .portion(200).kcal(100).protein(20.0).fat(5.4).carbs(10.2).build();

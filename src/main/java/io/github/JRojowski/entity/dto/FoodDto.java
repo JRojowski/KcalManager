@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +21,6 @@ public class FoodDto {
     private Double protein;
     private Double fat;
     private Double carbs;
+    private List<String> mealList;
+    private String environment;
 }

@@ -5,8 +5,7 @@ import io.github.JRojowski.entity.dto.FoodDto;
 import io.github.JRojowski.entity.dto.MealDto;
 import io.github.JRojowski.service.FoodService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,9 +17,9 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/foods")
+@Slf4j
 class FoodController {
 
-    public static final Logger logger = LoggerFactory.getLogger(FoodController.class);
     private final FoodService foodService;
 
     @PostMapping
@@ -35,8 +34,8 @@ class FoodController {
     }
 
     @GetMapping
-    ResponseEntity<List<FoodDto>> getAllFoods() {
-        return ResponseEntity.ok(foodService.getAllFoods());
+    List<FoodDto> getAllFoods() {
+        return foodService.getAllFoods();
     }
 
     @GetMapping("/{id}")

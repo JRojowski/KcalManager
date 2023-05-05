@@ -7,6 +7,8 @@ import io.github.JRojowski.entity.dto.MealDto;
 import io.github.JRojowski.repository.FoodRepository;
 import io.github.JRojowski.util.Mapper;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -20,6 +22,8 @@ public class FoodService {
 
     public final FoodRepository foodRepository;
     public final Mapper mapper;
+    @Autowired
+    private Environment environment;
 
     public Food createNewFood(FoodDto foodDto) {
         return foodRepository.save(mapper.foodFromDto(foodDto));
@@ -33,9 +37,12 @@ public class FoodService {
     }
 
     public FoodDto getFoodById(int id) {
-       return foodRepository.findById(id)
-               .map(mapper::dtoFromFood)
-               .orElseThrow(() -> new NotFoundException("Food with id: " + id + " not found"));
+        FoodDto foodDto = foodRepository.findById(id)
+                .map(mapper::dtoFromFood)
+                .orElseThrow(() -> new NotFoundException("Food with id: " + id + " not found"));
+        String port = environment.getProperty("local.server.port");
+        foodDto.setEnvironment(port);
+        return foodDto;
     }
 
     @Transactional

@@ -11,6 +11,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class MealDto {
 
-    @NotBlank
+    @NotBlank(message = "Name must not be empty")
     private String name;
 }

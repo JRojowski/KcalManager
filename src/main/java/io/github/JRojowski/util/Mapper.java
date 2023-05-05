@@ -33,6 +33,7 @@ public class Mapper {
                 .protein(food.getProtein())
                 .fat(food.getFat())
                 .carbs(food.getCarbs())
+                .mealList(food.getRecipes().stream().map(recipe -> recipe.getMeal().getName()).toList())
                 .build();
     }
 
