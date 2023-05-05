@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Recipe {
+public class Recipe extends Audit {
 
     @EmbeddedId
     private RecipePK recipeId = new RecipePK();
@@ -26,8 +26,8 @@ public class Recipe {
     @ManyToOne
     @MapsId("foodId")
     @JoinColumn(name = "food_id")
+    @JsonIgnore
     private Food food;
-    private float grams;
-
+    private Double grams;
 
 }

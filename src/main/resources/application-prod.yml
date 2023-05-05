@@ -1,8 +1,0 @@
-spring:
-  h2:
-    console:
-      enabled: false
-  datasource:
-    url: 'jdbc:h2:mem:kcal-db'
-food:
-  testProp: 'test_prod'

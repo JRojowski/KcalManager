@@ -1,0 +1,7 @@
+http://localhost:8765/calories-service/calories/foods/3?grams=200
+
+http://localhost:8765/food-service/foods
+http://localhost:8765/food-service/foods/3/meals
+
+http://localhost:8000/foods
+http://localhost:8000/foods/3/meals

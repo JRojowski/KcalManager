@@ -1,12 +1,11 @@
 package io.github.JRojowski.controller;
 
 import io.github.JRojowski.entity.Food;
-import io.github.JRojowski.entity.dto.FoodCaloriesDto;
 import io.github.JRojowski.entity.dto.FoodDto;
+import io.github.JRojowski.entity.dto.MealDto;
 import io.github.JRojowski.service.FoodService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,25 +17,25 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/foods")
+@Slf4j
 class FoodController {
 
-    public static final Logger logger = LoggerFactory.getLogger(FoodController.class);
     private final FoodService foodService;
 
     @PostMapping
-    ResponseEntity<Food> createFood(@Valid @RequestBody FoodDto foodDto) {
+    ResponseEntity<Integer> createFood(@Valid @RequestBody FoodDto foodDto) {
         Food food = foodService.createNewFood(foodDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(food.getFoodId())
+                .buildAndExpand(food.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(food);
+        return ResponseEntity.created(location).body(food.getId());
     }
 
     @GetMapping
-    ResponseEntity<List<FoodDto>> getAllFoods() {
-        return ResponseEntity.ok(foodService.getAllFoods());
+    List<FoodDto> getAllFoods() {
+        return foodService.getAllFoods();
     }
 
     @GetMapping("/{id}")
@@ -45,14 +44,13 @@ class FoodController {
     }
 
     @PatchMapping("/report/{id}")
-    ResponseEntity<Food> reportFood(@PathVariable int id) {
-        return ResponseEntity.ok(foodService.reportFood(id));
+    ResponseEntity<Integer> reportFood(@PathVariable int id) {
+        return ResponseEntity.ok(foodService.reportFood(id).getId());
     }
 
-    @GetMapping("/calories/{id}")
-    ResponseEntity<FoodCaloriesDto> countFoodCalories(@PathVariable int id) {
-        return ResponseEntity.ok(foodService.countFoodCalories(id));
+    @GetMapping("/{id}/meals")
+    ResponseEntity<List<MealDto>> getMealsfromFood(@PathVariable int id) {
+        return ResponseEntity.ok(foodService.getMealsFromFood(id));
     }
-
 
 }

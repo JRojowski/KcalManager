@@ -1,0 +1,72 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-1">
+        <createTable tableName="food">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="producer" type="VARCHAR(255)"/>
+            <column name="portion" type="INT"/>
+            <column name="price" type="DOUBLE"/>
+            <column name="kcal" type="INT"/>
+            <column name="protein" type="DOUBLE"/>
+            <column name="fat" type="DOUBLE"/>
+            <column name="carbs" type="DOUBLE"/>
+            <column name="created_on" type="datetime" defaultValueComputed="NOW()"/>
+            <column name="updated_on" type="datetime"/>
+            <column name="reported" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-2">
+        <createTable tableName="meal">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="created_on" type="datetime" defaultValueComputed="NOW()"/>
+            <column name="updated_on" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-3">
+        <createTable tableName="recipe">
+            <column name="food_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="meal_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="grams" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValueComputed="NOW()"/>
+            <column name="updated_on" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-4">
+        <createIndex indexName="FK6jly81m7wlwrxue37o4xd7x7p" tableName="recipe">
+            <column name="meal_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-5">
+        <createIndex indexName="FKdjlos63vbmjt9n9u1lk7e22sh" tableName="recipe">
+            <column name="food_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-6">
+        <addForeignKeyConstraint baseColumnNames="meal_id" baseTableName="recipe" constraintName="FK6jly81m7wlwrxue37o4xd7x7p" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="meal" validate="true"/>
+    </changeSet>
+    <changeSet author="ROJ1WZ (generated)" id="1677861948742-7">
+        <addForeignKeyConstraint baseColumnNames="food_id" baseTableName="recipe" constraintName="FKdjlos63vbmjt9n9u1lk7e22sh" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="food" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>

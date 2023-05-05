@@ -24,6 +24,7 @@ public class Mapper {
 
     public FoodDto dtoFromFood(Food food) {
         return FoodDto.builder()
+                .id(food.getId())
                 .name(food.getName())
                 .producer(food.getProducer())
                 .price(food.getPrice())
@@ -32,12 +33,19 @@ public class Mapper {
                 .protein(food.getProtein())
                 .fat(food.getFat())
                 .carbs(food.getCarbs())
+                .mealList(food.getRecipes().stream().map(recipe -> recipe.getMeal().getName()).toList())
                 .build();
     }
 
     public Meal mealFromDto(MealDto mealDto) {
         return Meal.builder()
                 .name(mealDto.getName())
+                .build();
+    }
+
+    public MealDto dtoFromMeal(Meal meal) {
+        return MealDto.builder()
+                .name(meal.getName())
                 .build();
     }
 }

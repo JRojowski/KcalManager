@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @Getter
 @Setter
 @Builder
 public class MealDto {
 
-    @NotBlank
+    @NotBlank(message = "Name must not be empty")
     private String name;
-    private List<RecipeDto> recipeDtoList;
 }
