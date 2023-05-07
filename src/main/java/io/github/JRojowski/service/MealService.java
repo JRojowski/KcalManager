@@ -7,9 +7,10 @@ import io.github.JRojowski.entity.dto.MealDto;
 import io.github.JRojowski.repository.FoodRepository;
 import io.github.JRojowski.repository.MealRepository;
 import io.github.JRojowski.repository.RecipeRepository;
-import io.github.JRojowski.util.Mapper;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -17,13 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 public class MealService {
 
-    private final Mapper mapper;
+    private final ModelMapper modelMapper;
     private final MealRepository mealRepository;
     private final FoodRepository foodRepository;
     private final RecipeRepository recipeRepository;
 
-    public Meal createMeal(String name) {
-        Meal meal = Meal.builder().name(name).build();
+    public Meal createMeal(MealDto mealDto) {
+        Meal meal = modelMapper.map(mealDto, Meal.class);
         return mealRepository.save(meal);
     }
 
@@ -36,23 +37,21 @@ public class MealService {
         recipe.setGrams(grams);
         return recipeRepository.save(recipe);
     }
-    public List<MealDto> getAll() {
-        return mealRepository.findAll().stream().map(mapper::dtoFromMeal).toList();
+    public List<MealDto> getAllMeals() {
+        return mealRepository.findAll().stream()
+                .map(meal -> modelMapper.map(meal, MealDto.class))
+                .toList();
     }
-    public MealDto getDtoById(int id) {
+    public MealDto getMealById(int id) {
         return mealRepository.findById(id)
-                .map(mapper::dtoFromMeal)
-                .orElseThrow();
+                .map(meal -> modelMapper.map(meal, MealDto.class))
+                .orElseThrow(() -> new NotFoundException("not"));
     }
 
-    public Meal getById(int id) {
-        return mealRepository.findById(id)
-                .orElseThrow();
-    }
-
-    public MealDto editMeal(int id, String name) {
-        Meal editedMeal = getById(id);
-        editedMeal.setName(name);
-        return mapper.dtoFromMeal(mealRepository.save(editedMeal));
+    public MealDto editMeal(MealDto mealDto) {
+        Meal editedMeal = mealRepository.findById(mealDto.getId())
+                .orElseThrow(() -> new NotFoundException("not fiynd"));
+        editedMeal.setName(mealDto.getName());
+        return modelMapper.map(mealRepository.save(editedMeal), MealDto.class);
     }
 }
