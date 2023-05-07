@@ -1,8 +1,6 @@
 package io.github.JRojowski.entity.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -10,6 +8,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FoodDto {
     private int id;
     @NotBlank(message = "Name must not be empty")
@@ -23,4 +23,5 @@ public class FoodDto {
     private Double carbs;
     private List<String> mealList;
     private String environment;
+    private boolean reported;
 }

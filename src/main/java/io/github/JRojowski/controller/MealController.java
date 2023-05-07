@@ -10,50 +10,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/meal")
+@RequestMapping("/meals")
 @Slf4j
 class MealController {
 
     private final MealService mealService;
 
     @PostMapping()
-    ResponseEntity<Integer> createFood(@RequestParam @NotBlank String name) {
-        Meal meal = mealService.createMeal(name);
+    ResponseEntity<Meal> createMeal(@RequestBody @Valid MealDto mealDto) {
+        log.info("Consumed POST /meals");
+        Meal meal = mealService.createMeal(mealDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{}")
+                .path("/{id}")
                 .buildAndExpand(meal.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(meal.getId());
+        return ResponseEntity.created(location).body(meal);
     }
 
     @PostMapping("/{id}/addRecipe")
     ResponseEntity<Recipe> createRecipe(@PathVariable int id,
                                         @RequestParam int foodId,
                                         @RequestParam double grams) {
-
+        log.info("CONSUMED POST /meals/%s/addRecipe with params foodId: %s and grams: %s"
+                .formatted(id, foodId, grams));
         return ResponseEntity.ok(mealService.createRecipe(id, foodId, grams));
     }
 
     @GetMapping
     ResponseEntity<List<MealDto>> getAllMeals() {
-        return ResponseEntity.ok(mealService.getAll());
+        log.info("CONSUMED GET /meals");
+        return ResponseEntity.ok(mealService.getAllMeals());
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<MealDto> getMealById(int id) {
-        return ResponseEntity.ok(mealService.getDtoById(id));
+    ResponseEntity<MealDto> getMealById(@PathVariable int id) {
+        log.info("CONSUMED GET /meals/%s".formatted(id));
+        return ResponseEntity.ok(mealService.getMealById(id));
     }
-    @PutMapping("/{id}/rename")
-    ResponseEntity<MealDto> renameMeal(@PathVariable int id,
-                                        @RequestParam String name) {
-        return ResponseEntity.ok(mealService.editMeal(id, name));
+    @PutMapping()
+    ResponseEntity<MealDto> renameMeal(@RequestBody @Valid MealDto mealDto) {
+        log.info("CONSUMED PUT /meals");
+        return ResponseEntity.ok(mealService.editMeal(mealDto));
+    }
 
-    }
 }

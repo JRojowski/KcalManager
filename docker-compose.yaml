@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   food-service:
-    image: jrojowski/fitatu-food-information:0.0.1-SNAPSHOT
+    image: jrojowski/fitatu-food-information:0.0.2-SNAPSHOT
     restart: always
     ports:
-      - 8000:8000
+      - "8000:8000"
     environment:
       spring.profiles.active: cloud
       spring.datasource.url: jdbc:mysql://mysqldb:3306/fitatu?allowPublicKeyRetrieval=true&useSSL=false
@@ -64,4 +64,3 @@ services:
     image: openzipkin/zipkin:2.23
     ports:
       - "9411:9411"
-
